@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">Productos Frescos</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Configuracion</string>
+
+    <string name="str_login_usuario">Nombre Usuario:</string>
+    <string name="str_login_password">Contraseña:</string>
+    <string name="str_login_ingresar">Ingresar</string>
+
+    <string name="title_fragment_clientes">Administracion de Clientes</string>
+    <string name="title_fragment_pedidos">Entrega de pedidos</string>
+    <string name="title_fragment_productos">Listar productos</string>
+    <string name="title_fragment_resumen">Resumen de caja</string>
+    <string name="title_fragment_ruta">Ruta</string>
+
+
+    <string name="fragment_productos_empty">Sin productos</string>
+    <string name="fragment_clientes_empty">Sin clientes</string>
+
+    <string name="add_cliente">Agregar Cliente</string>
+    <string name="update_cliente">Modificar Cliente</string>
+    <string name="delete_cliente">Eliminar Cliente</string>
+
+    <string name="nombre_cliente">Nombre</string>
+    <string name="direccion_cliente">Direccion</string>
+    <string name="telefono_cliente">Telefono</string>
+    <string name="latitud_cliente">Latitud</string>
+    <string name="longuitud_cliente">Longuitud</string>
+
+    <string name="add_producto">Agregar Producto</string>
+    <string name="update_producto">Modificar Producto</string>
+
+    <string name="add_pedido">Agregar Pedido</string>
+    <string name="update_pedido">Modificar Pedido</string>
+    <string name="delete_pedido">Eliminar Pedido</string>
+
+    <string name="str_pedido_cliente">Cliente</string>
+    <string name="str_pedido_fecha">Fecha de Entrega</string>
+    <string name="str_pedido_entregado">Entregado</string>
+    <string name="str_pedido_add_detalle">Agregar Detalle</string>
+    <string name="str_pedido_detalles">Detalles</string>
+    <string name="str_pedido_producto">Producto</string>
+    <string name="str_pedido_cantidad">Cantidad</string>
+    <string name="str_pedido_precio">Precio Unit.</string>
+    <string name="str_pedido_total">Total</string>
+
+    <string name="update">Modificar</string>
+    <string name="add">Agregar</string>
+    <string name="reset">Limpiar</string>
+    <string name="cancel">Cancelar</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">Iniciar Sesion</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+</resources>

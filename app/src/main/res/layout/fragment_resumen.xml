@@ -1,0 +1,60 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     tools:context="samuelvasquez.inacap.cl.unidad3.ResumenFragment">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lbl_titulo_total_entregas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Total Entregas" />
+
+        <TextView
+            android:id="@+id/lbl_valor_total_entregas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/lbl_titulo_total_pedidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Total Pedidos" />
+
+        <TextView
+            android:id="@+id/lbl_valor_total_pedidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/lbl_titulo_saldo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Saldo" />
+
+        <TextView
+            android:id="@+id/lbl_valor_saldo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:text="" />
+
+    </LinearLayout>
+
+</FrameLayout>

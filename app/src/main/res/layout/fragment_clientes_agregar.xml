@@ -1,0 +1,58 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="samuelvasquez.inacap.cl.unidad3.ClientesAgregarFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp" >
+
+        <EditText
+            android:id="@+id/etxt_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/nombre_cliente"
+            android:nextFocusDown="@+id/etxt_direccion"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/etxt_direccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etxt_nombre"
+            android:hint="@string/direccion_cliente"
+            android:nextFocusDown="@+id/etxt_telefono"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/etxt_telefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etxt_direccion"
+            android:hint="@string/telefono_cliente"
+            android:inputType="phone"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/etxt_latitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etxt_telefono"
+            android:hint="@string/latitud_cliente"
+            android:inputType="numberSigned|numberDecimal"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/etxt_longuitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etxt_latitud"
+            android:hint="@string/longuitud_cliente"
+            android:inputType="numberSigned|numberDecimal"
+            android:singleLine="true" />
+
+    </RelativeLayout>
+</ScrollView>

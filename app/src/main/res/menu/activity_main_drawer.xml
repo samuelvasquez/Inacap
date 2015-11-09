@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_clientes" android:icon="@android:drawable/ic_menu_camera"
+            android:title="Administración de clientes" />
+        <item android:id="@+id/nav_pedidos" android:icon="@android:drawable/ic_menu_gallery"
+            android:title="Entrega de pedidos" />
+        <item android:id="@+id/nav_productos" android:icon="@android:drawable/ic_menu_slideshow"
+            android:title="Listar productos" />
+        <item android:id="@+id/nav_caja" android:icon="@android:drawable/ic_menu_manage"
+            android:title="Resumen de caja" />
+   </group>
+</menu>
