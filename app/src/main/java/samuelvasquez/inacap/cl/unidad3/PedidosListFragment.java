@@ -2,11 +2,11 @@ package samuelvasquez.inacap.cl.unidad3;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -38,176 +38,18 @@ import samuelvasquez.inacap.cl.unidad3.datamodel.Pedido;
 public class PedidosListFragment extends Fragment {
     public static final String ARG_ITEM_ID = "pedidos_list";
 
-    private static final String ARG_VENDEDOR_ID = "id_vendedor";
-
-    private int id_vendedor;
-
+    public static final String ARG_VENDEDOR_ID = "id_vendedor";
     Activity activity;
     ArrayList<Pedido> pedidos;
     Pedido pedido;
     PedidoListAdapter pedidoListAdapter;
     DAOPedido pedidoDAO;
-    private GetPedidoTask task;
-    private ActionMode mActionMode;
-
     // UI references
     ListView list_pedidos;
-
+    private int id_vendedor;
+    private GetPedidoTask task;
+    private ActionMode mActionMode;
     private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment PedidosListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PedidosListFragment newInstance(int id_vendedor) {
-        PedidosListFragment fragment = new PedidosListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public PedidosListFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        activity = getActivity();
-        pedidoDAO = new DAOPedido(activity);
-        if (getArguments() != null) {
-            id_vendedor = getArguments().getInt(ARG_VENDEDOR_ID);
-        }
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_pedido, menu);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_pedidos_list, container, false);
-        View rootView = inflater.inflate(R.layout.fragment_pedidos_list, container, false);
-        findViewsById(rootView);
-
-        task = new GetPedidoTask(activity);
-        task.execute((Void) null);
-
-        return rootView;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-/*
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-*/
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_add:
-                ((MainActivity)activity).goToAddPedido();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public class GetPedidoTask extends AsyncTask<Void, Void, ArrayList<Pedido>> {
-
-        private final WeakReference<Activity> activityWeakRef;
-
-        public GetPedidoTask(Activity context) {
-            this.activityWeakRef = new WeakReference<Activity>(context);
-        }
-
-        @Override
-        protected ArrayList<Pedido> doInBackground(Void... arg0) {
-            ArrayList<Pedido> pedidoList = pedidoDAO.getPedidosByIdVendedor(id_vendedor);
-            return pedidoList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Pedido> pedidoList) {
-            if (activityWeakRef.get() != null
-                    && !activityWeakRef.get().isFinishing()) {
-                Log.d("pedido", pedidoList.toString());
-                pedidos = pedidoList;
-                if (pedidoList != null) {
-                    if (pedidoList.size() != 0) {
-                        pedidoListAdapter = new PedidoListAdapter(activity,
-                                pedidoList);
-                        list_pedidos.setAdapter(pedidoListAdapter);
-                        pedidoListAdapter.notifyDataSetChanged();
-
-                        // ListView Item Click Listener
-                        list_pedidos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view,
-                                                    int position, long id) {
-                                pedido = (Pedido)list_pedidos.getItemAtPosition(position);
-                                if(mActionMode == null)
-                                {
-                                    mActionMode = activity.startActionMode(mActionModeCallback);
-                                    view.setSelected(true);
-                                }
-                            }
-                        });
-                    } else {
-                        Toast.makeText(activity, "Sin pedidos",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-
-            }
-        }
-    }
-
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -246,9 +88,96 @@ public class PedidosListFragment extends Fragment {
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mActionMode  = null;
+            mActionMode = null;
         }
     };
+
+    public PedidosListFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment PedidosListFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static PedidosListFragment newInstance(int id_vendedor) {
+        PedidosListFragment fragment = new PedidosListFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = getActivity();
+        pedidoDAO = new DAOPedido(activity);
+        if (getArguments() != null) {
+            id_vendedor = getArguments().getInt(ARG_VENDEDOR_ID);
+        }
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_pedido, menu);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        //return inflater.inflate(R.layout.fragment_pedidos_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_pedidos_list, container, false);
+        findViewsById(rootView);
+
+        task = new GetPedidoTask(activity);
+        task.execute((Void) null);
+
+        return rootView;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+/*
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+*/
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_add:
+                ((MainActivity)activity).goToAddPedido();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onResume() {
@@ -309,6 +238,71 @@ public class PedidosListFragment extends Fragment {
         {
             pedidoDAO.delete(pedido);
             pedidoListAdapter.remove(pedido);
+        }
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+    public class GetPedidoTask extends AsyncTask<Void, Void, ArrayList<Pedido>> {
+
+        private final WeakReference<Activity> activityWeakRef;
+
+        public GetPedidoTask(Activity context) {
+            this.activityWeakRef = new WeakReference<Activity>(context);
+        }
+
+        @Override
+        protected ArrayList<Pedido> doInBackground(Void... arg0) {
+            ArrayList<Pedido> pedidoList = pedidoDAO.getPedidosByIdVendedor(id_vendedor);
+            return pedidoList;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Pedido> pedidoList) {
+            if (activityWeakRef.get() != null
+                    && !activityWeakRef.get().isFinishing()) {
+                Log.d("pedido", pedidoList.toString());
+                pedidos = pedidoList;
+                if (pedidoList != null) {
+                    if (pedidoList.size() != 0) {
+                        pedidoListAdapter = new PedidoListAdapter(activity,
+                                pedidoList);
+                        list_pedidos.setAdapter(pedidoListAdapter);
+                        pedidoListAdapter.notifyDataSetChanged();
+
+                        // ListView Item Click Listener
+                        list_pedidos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view,
+                                                    int position, long id) {
+                                pedido = (Pedido) list_pedidos.getItemAtPosition(position);
+                                if (mActionMode == null) {
+                                    mActionMode = activity.startActionMode(mActionModeCallback);
+                                    view.setSelected(true);
+                                }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(activity, "Sin pedidos",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
         }
     }
 

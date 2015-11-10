@@ -1,10 +1,10 @@
 package samuelvasquez.inacap.cl.unidad3;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -18,11 +18,8 @@ import android.widget.Toast;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOPedido;
 import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOProducto;
-import samuelvasquez.inacap.cl.unidad3.dataaccess.PedidoListAdapter;
 import samuelvasquez.inacap.cl.unidad3.dataaccess.ProductoListAdapter;
-import samuelvasquez.inacap.cl.unidad3.datamodel.Pedido;
 import samuelvasquez.inacap.cl.unidad3.datamodel.Producto;
 
 
@@ -37,22 +34,22 @@ import samuelvasquez.inacap.cl.unidad3.datamodel.Producto;
 public class ProductosListFragment extends Fragment {
     public static final String ARG_ITEM_ID = "productos_list";
 
-    private static final String ARG_VENDEDOR_ID = "id_vendedor";
-
-    private int id_vendedor;
-
+    public static final String ARG_VENDEDOR_ID = "id_vendedor";
     Activity activity;
     ArrayList<Producto> productos;
     Producto producto;
     ProductoListAdapter productoListAdapter;
     DAOProducto productoDAO;
-    private GetProductosTask task;
-    private ActionMode mActionMode;
-
     // UI references
     ListView list_producto;
-
+    private int id_vendedor;
+    private GetProductosTask task;
+    private ActionMode mActionMode;
     private OnFragmentInteractionListener mListener;
+
+    public ProductosListFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -67,10 +64,6 @@ public class ProductosListFragment extends Fragment {
         args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public ProductosListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -127,6 +120,27 @@ public class ProductosListFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        getActivity().setTitle(R.string.title_fragment_productos);
+        //getActivity().getActionBar().setTitle(R.string.title_fragment_productos);
+        super.onResume();
+    }
+
+    private void findViewsById(View view) {
+        list_producto = (ListView) view.findViewById(R.id.list_producto);
+    }
+
+    /*
+         * This method is invoked from MainActivity onFinishDialog() method. It is
+	     * called from CustomEmpDialogFragment when an employee record is updated.
+	     * This is used for communicating between fragments.
+	     */
+    public void updateView() {
+        task = new GetProductosTask(activity);
+        task.execute((Void) null);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -139,9 +153,8 @@ public class ProductosListFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
-
 
     public class GetProductosTask extends AsyncTask<Void, Void, ArrayList<Producto>> {
 
@@ -176,27 +189,6 @@ public class ProductosListFragment extends Fragment {
 
             }
         }
-    }
-
-    @Override
-    public void onResume() {
-        getActivity().setTitle(R.string.title_fragment_productos);
-        //getActivity().getActionBar().setTitle(R.string.title_fragment_productos);
-        super.onResume();
-    }
-
-    private void findViewsById(View view) {
-        list_producto = (ListView) view.findViewById(R.id.list_producto);
-    }
-
-    /*
-	     * This method is invoked from MainActivity onFinishDialog() method. It is
-	     * called from CustomEmpDialogFragment when an employee record is updated.
-	     * This is used for communicating between fragments.
-	     */
-    public void updateView() {
-        task = new GetProductosTask(activity);
-        task.execute((Void) null);
     }
 
 

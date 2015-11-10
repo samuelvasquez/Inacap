@@ -1,20 +1,23 @@
 package samuelvasquez.inacap.cl.unidad3;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.IsolatedContext;
 import android.test.RenamingDelegatingContext;
 import android.test.mock.MockContentResolver;
 import android.test.mock.MockContext;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOCliente;
 import samuelvasquez.inacap.cl.unidad3.datamodel.Cliente;
 
 public class DAOClienteTest extends AndroidTestCase {
     private static final String TEST_FILE_PREFIX = "test_";
+    double latitude = -33.4691199;
+    double longitude = -70.641997;
     private DAOCliente daoCliente;
 
     protected void setUp() throws Exception {
@@ -42,6 +45,8 @@ public class DAOClienteTest extends AndroidTestCase {
         cliente1.nombre = "nuevo cliente 2";
         cliente1.direccion = "direccion actualizada cliente 2";
         cliente1.telefono = "121212";
+        cliente1.latitud = latitude;
+        cliente1.longuitud = longitude;
         daoCliente.update(cliente1);
 
         Cliente cliente2 = daoCliente.getCliente(2);
@@ -58,6 +63,8 @@ public class DAOClienteTest extends AndroidTestCase {
         cliente3.nombre = "cliente 100";
         cliente3.direccion = "actualizada cliente 100";
         cliente3.telefono = "121212";
+        cliente3.latitud = latitude;
+        cliente3.longuitud = longitude;
         try
         {
             daoCliente.update(cliente3);
@@ -73,6 +80,8 @@ public class DAOClienteTest extends AndroidTestCase {
         cliente4.nombre = "";
         cliente4.direccion = "actualizada cliente 2";
         cliente4.telefono = "121212";
+        cliente4.latitud = latitude;
+        cliente4.longuitud = longitude;
         try
         {
             daoCliente.update(cliente4);
@@ -88,6 +97,8 @@ public class DAOClienteTest extends AndroidTestCase {
         cliente1.nombre = "nuevo cliente vendedor 1";
         cliente1.direccion = "direccion nuevo cliente 1";
         cliente1.telefono = "121212";
+        cliente1.latitud = latitude;
+        cliente1.longuitud = longitude;
         long id_new = daoCliente.save(cliente1);
 
         Cliente cliente2 = daoCliente.getCliente((int)id_new);
@@ -103,6 +114,8 @@ public class DAOClienteTest extends AndroidTestCase {
         cliente3.nombre = "cliente 100";
         cliente3.direccion = "actualizada cliente 100";
         cliente3.telefono = "121212";
+        cliente3.latitud = latitude;
+        cliente3.longuitud = longitude;
         try
         {
             daoCliente.save(cliente3);
@@ -117,6 +130,8 @@ public class DAOClienteTest extends AndroidTestCase {
         cliente4.nombre = "";
         cliente4.direccion = "actualizada cliente 2";
         cliente4.telefono = "121212";
+        cliente4.latitud = latitude;
+        cliente4.longuitud = longitude;
         try
         {
             daoCliente.save(cliente4);

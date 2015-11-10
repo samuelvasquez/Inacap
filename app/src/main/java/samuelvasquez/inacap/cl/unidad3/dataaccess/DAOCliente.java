@@ -9,7 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import samuelvasquez.inacap.cl.unidad3.datamodel.*;
+import samuelvasquez.inacap.cl.unidad3.datamodel.Cliente;
+import samuelvasquez.inacap.cl.unidad3.datamodel.Usuario;
 
 public class DAOCliente {
     protected SQLiteDatabase database;
@@ -48,17 +49,23 @@ public class DAOCliente {
             throw new NullPointerException("No se encuentra informacion de cliente");
 
         // Validacion de campos obligatorios
-        if(cliente.nombre.trim() == "")
+        if (cliente.nombre.trim().equals(""))
         {
             throw new NullPointerException("Debe ingresar nombre");
         }
-        if(cliente.direccion.trim() == "")
+        if (cliente.direccion.trim().equals(""))
         {
             throw new NullPointerException("Debe ingresar direccion");
         }
-        if(cliente.telefono.trim() == "")
+        if (cliente.telefono.trim().equals(""))
         {
             throw new NullPointerException("Debe ingresar telefono");
+        }
+        if (cliente.latitud == 0) {
+            throw new NullPointerException("Debe ingresar latitud");
+        }
+        if (cliente.longuitud == 0) {
+            throw new NullPointerException("Debe ingresar longuitud");
         }
 
         ContentValues values = new ContentValues();
@@ -82,17 +89,23 @@ public class DAOCliente {
             throw new NullPointerException("No se encuentra informacion de vendedor");
 
         // Validacion de campos obligatorios
-        if(cliente.nombre.trim() == "")
+        if (cliente.nombre.trim().equals(""))
         {
             throw new NullPointerException("Debe ingresar nombre");
         }
-        if(cliente.direccion.trim() == "")
+        if (cliente.direccion.trim().equals(""))
         {
             throw new NullPointerException("Debe ingresar direccion");
         }
-        if(cliente.telefono.trim() == "")
+        if (cliente.telefono.trim().equals(""))
         {
             throw new NullPointerException("Debe ingresar telefono");
+        }
+        if (cliente.latitud == 0) {
+            throw new NullPointerException("Debe ingresar latitud");
+        }
+        if (cliente.longuitud == 0) {
+            throw new NullPointerException("Debe ingresar longuitud");
         }
 
         ContentValues values = new ContentValues();
@@ -101,7 +114,7 @@ public class DAOCliente {
         values.put("DIRECCION", cliente.direccion);
         values.put("TELEFONO",cliente.telefono);
         values.put("LATITUD",cliente.latitud);
-        values.put("LONGUITUD",cliente.longuitud);
+        values.put("LONGUITUD", cliente.longuitud);
         return database.insert(tabla, null, values);
     }
 
@@ -145,7 +158,7 @@ public class DAOCliente {
             throw new NullPointerException("No se encuentra informacion de vendedor");
 
 
-        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+        ArrayList<Cliente> clientes = new ArrayList<>();
         String where = "ES_ACTIVO = 1 AND ID_VENDEDOR=?"; // the condition for the row(s) you want returned.
         String[] whereArgs = new String[] { // The value of the column specified above for the rows to be included in the response
                 String.valueOf(id_vendedor)
@@ -162,6 +175,38 @@ public class DAOCliente {
 
         return clientes;
     }
+
+    public ArrayList<Cliente> getClientesPendientesByIdVendedor(int id_vendedor) {
+        Log.i("daocliente", "getClientesPendientesByIdVendedor " + String.valueOf(id_vendedor));
+
+        // Validacion existe vendedor
+        Usuario _usuario = daoUsuario.GetUsuario(id_vendedor);
+        if (_usuario == null)
+            throw new NullPointerException("No se encuentra informacion de vendedor");
+
+
+        ArrayList<Cliente> clientes = new ArrayList<>();
+        String where = "ES_ACTIVO = 1 AND ID_VENDEDOR=? " +
+                "AND EXISTS(SELECT * " +
+                "FROM PEDIDO " +
+                "WHERE PEDIDO.ES_ACTIVO = 1 AND PEDIDO.ENTREGADO = 0 " +
+                "AND PEDIDO.ID_CLIENTE=CLIENTE.ID) "; // the condition for the row(s) you want returned.
+        String[] whereArgs = new String[]{ // The value of the column specified above for the rows to be included in the response
+                String.valueOf(id_vendedor)
+        };
+        Cursor cursor = database.query(tabla, columnas, where, whereArgs, null, null, null);
+        while (cursor.moveToNext()) {
+            Cliente cliente = cursorToCliente(cursor);
+            clientes.add(cliente);
+        }
+        // make sure to close the cursor
+        cursor.close();
+
+        Log.i("daocliente", "return " + String.valueOf(clientes.size()));
+
+        return clientes;
+    }
+
 
     public Cliente getCliente(int id) {
         Cliente cliente = null;

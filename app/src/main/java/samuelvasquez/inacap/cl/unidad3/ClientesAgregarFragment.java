@@ -2,10 +2,10 @@ package samuelvasquez.inacap.cl.unidad3;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -32,15 +32,13 @@ import samuelvasquez.inacap.cl.unidad3.datamodel.Cliente;
 public class ClientesAgregarFragment extends Fragment {
     public static final String ARG_ITEM_ID = "clientes_agregar";
 
-    private static final String ARG_EDITAR = "editar";
-    private static final String ARG_CLIENTE_ID = "id_cliente";
-    private static final String ARG_VENDEDOR_ID = "id_vendedor";
-
+    public static final String ARG_EDITAR = "editar";
+    public static final String ARG_CLIENTE_ID = "id_cliente";
+    public static final String ARG_VENDEDOR_ID = "id_vendedor";
+    Activity activity;
     private boolean editar = false;
     private int id_cliente;
     private int id_vendedor;
-
-    Activity activity;
     private DAOCliente dao;
 
     // UI references
@@ -51,6 +49,10 @@ public class ClientesAgregarFragment extends Fragment {
     private EditText etxt_longuitud;
 
     private OnFragmentInteractionListener mListener;
+
+    public ClientesAgregarFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -66,10 +68,6 @@ public class ClientesAgregarFragment extends Fragment {
         args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public ClientesAgregarFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -176,42 +174,24 @@ public class ClientesAgregarFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
             case R.id.action_save:
-                if ( checkValidation () )
+                if (checkValidation())
                     confirmarRegistro();
                 else
                     Toast.makeText(activity, "Debe corregir los errores para continuar", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_revert:
-                ((MainActivity)activity).goToClientes();
+                ((MainActivity) activity).goToClientes();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onResume() {
@@ -227,7 +207,6 @@ public class ClientesAgregarFragment extends Fragment {
         }
         super.onResume();
     }
-
 
     private void findViewsById(View rootView) {
         etxt_nombre = (EditText) rootView.findViewById(R.id.etxt_nombre);
@@ -294,57 +273,63 @@ public class ClientesAgregarFragment extends Fragment {
     }
 
     /**
-     *Se realiza la validacion de los datos ingresados y se registra el nuevo usuario
+     * Se realiza la validacion de los datos ingresados y se registra el nuevo usuario
      **/
-    private void validarCliente()
-    {
-        if(etxt_nombre.getText().toString().trim().equals(""))
-        {
+    private void validarCliente() {
+        if (etxt_nombre.getText().toString().trim().equals("")) {
             Toast.makeText(activity, "Debe ingresar un nombre", Toast.LENGTH_LONG).show();
             etxt_nombre.requestFocus();
             return;
         }
 
-        if(etxt_direccion.getText().toString().trim().equals(""))
-        {
+        if (etxt_direccion.getText().toString().trim().equals("")) {
             Toast.makeText(activity, "Debe ingresar direccion", Toast.LENGTH_LONG).show();
             etxt_direccion.requestFocus();
             return;
         }
 
-        if(etxt_telefono.getText().toString().trim().equals(""))
-        {
+        if (etxt_telefono.getText().toString().trim().equals("")) {
             Toast.makeText(activity, "Debe ingresar telefono", Toast.LENGTH_LONG).show();
             etxt_telefono.requestFocus();
             return;
         }
 
-        if(etxt_latitud.getText().toString().trim().equals(""))
-        {
+        if (etxt_latitud.getText().toString().trim().equals("")) {
             Toast.makeText(activity, "Debe ingresar latitud", Toast.LENGTH_LONG).show();
             etxt_latitud.requestFocus();
             return;
         }
 
-        if(etxt_longuitud.getText().toString().trim().equals(""))
-        {
+        if (etxt_longuitud.getText().toString().trim().equals("")) {
             Toast.makeText(activity, "Debe ingresar longuitud", Toast.LENGTH_LONG).show();
             etxt_longuitud.requestFocus();
             return;
         }
 
         Cliente cliente = setCliente();
-        if(!editar)
-        {
+        if (!editar) {
             dao.save(cliente);
             Toast.makeText(activity, "Cliente agregado correctamente", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        } else {
             dao.update(cliente);
             Toast.makeText(activity, "Cliente modificado correctamente", Toast.LENGTH_LONG).show();
         }
 
-        ((MainActivity)activity).goToClientes();
+        ((MainActivity) activity).goToClientes();
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }

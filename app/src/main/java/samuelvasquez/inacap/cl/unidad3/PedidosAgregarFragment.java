@@ -3,10 +3,10 @@ package samuelvasquez.inacap.cl.unidad3;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -56,16 +56,13 @@ import samuelvasquez.inacap.cl.unidad3.datamodel.Producto;
 public class PedidosAgregarFragment extends Fragment implements View.OnClickListener {
     public static final String ARG_ITEM_ID = "pedidos_agregar";
 
-    private static final String ARG_EDITAR = "editar";
-    private static final String ARG_PEDIDO_ID = "id_pedido";
-    private static final String ARG_VENDEDOR_ID = "id_vendedor";
-
+    public static final String ARG_EDITAR = "editar";
+    public static final String ARG_PEDIDO_ID = "id_pedido";
+    public static final String ARG_VENDEDOR_ID = "id_vendedor";
+    Activity activity;
     private boolean editar = false;
     private int id_pedido;
     private int id_vendedor;
-
-    Activity activity;
-
     private SimpleDateFormat dateFormatter;
 
     private DAOPedido daoPedido;
@@ -89,6 +86,10 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
 
     private OnFragmentInteractionListener mListener;
 
+    public PedidosAgregarFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -104,10 +105,6 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
         args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public PedidosAgregarFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -256,34 +253,19 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
             case R.id.action_save:
-                if ( checkValidation () )
+                if (checkValidation())
                     confirmarRegistro();
                 else
                     Toast.makeText(activity, "Debe corregir los errores para continuar", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_revert:
-                ((MainActivity)activity).goToPedidos();
+                ((MainActivity) activity).goToPedidos();
                 return true;
         }
 
@@ -292,7 +274,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if(view == txt_fecha) {
+        if (view == txt_fecha) {
             fechaDatePickerDialog.show();
         }
     }
@@ -512,5 +494,20 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
         sel_producto.setSelection(0);
         txt_cantidad.setText("");
         txt_precio.setText("");
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }

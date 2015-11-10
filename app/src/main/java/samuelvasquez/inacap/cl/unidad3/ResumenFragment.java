@@ -1,9 +1,9 @@
 package samuelvasquez.inacap.cl.unidad3;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +24,15 @@ import samuelvasquez.inacap.cl.unidad3.datamodel.ResumenCaja;
 public class ResumenFragment extends Fragment {
     public static final String ARG_ITEM_ID = "resumen";
 
-    private static final String ARG_VENDEDOR_ID = "id_vendedor";
-
-    private int id_vendedor;
-
-
+    public static final String ARG_VENDEDOR_ID = "id_vendedor";
     Activity activity;
     DAOPedido pedidoDAO;
-
-
+    private int id_vendedor;
     private OnFragmentInteractionListener mListener;
+
+    public ResumenFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -48,10 +47,6 @@ public class ResumenFragment extends Fragment {
         args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public ResumenFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -110,6 +105,13 @@ public class ResumenFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        getActivity().setTitle(R.string.title_fragment_resumen);
+        //getActivity().getActionBar().setTitle(R.string.title_fragment_resumen);
+        super.onResume();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -122,13 +124,6 @@ public class ResumenFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void onResume() {
-        getActivity().setTitle(R.string.title_fragment_resumen);
-        //getActivity().getActionBar().setTitle(R.string.title_fragment_resumen);
-        super.onResume();
+        void onFragmentInteraction(Uri uri);
     }
 }

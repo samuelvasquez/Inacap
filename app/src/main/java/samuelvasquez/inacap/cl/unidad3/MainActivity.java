@@ -5,9 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -71,10 +68,28 @@ public class MainActivity extends AppCompatActivity
             if (savedInstanceState.containsKey("content")) {
                 String content = savedInstanceState.getString("content");
 
+                if (content.equals(ClientesAgregarFragment.ARG_ITEM_ID)) {
+                    if (fragmentManager.findFragmentByTag(ClientesAgregarFragment.ARG_ITEM_ID) != null) {
+                        setTitle(R.string.add_cliente);
+                        contentFragment = fragmentManager.findFragmentByTag(ClientesAgregarFragment.ARG_ITEM_ID);
+                    }
+                }
                 if (content.equals(ClientesListFragment.ARG_ITEM_ID)) {
                     if (fragmentManager.findFragmentByTag(ClientesListFragment.ARG_ITEM_ID) != null) {
                         setTitle(R.string.title_fragment_clientes);
                         contentFragment = fragmentManager.findFragmentByTag(ClientesListFragment.ARG_ITEM_ID);
+                    }
+                }
+                if (content.equals(PedidosAgregarFragment.ARG_ITEM_ID)) {
+                    if (fragmentManager.findFragmentByTag(PedidosAgregarFragment.ARG_ITEM_ID) != null) {
+                        setTitle(R.string.add_pedido);
+                        contentFragment = fragmentManager.findFragmentByTag(PedidosAgregarFragment.ARG_ITEM_ID);
+                    }
+                }
+                if (content.equals(PedidosListFragment.ARG_ITEM_ID)) {
+                    if (fragmentManager.findFragmentByTag(PedidosListFragment.ARG_ITEM_ID) != null) {
+                        setTitle(R.string.title_fragment_pedidos);
+                        contentFragment = fragmentManager.findFragmentByTag(PedidosListFragment.ARG_ITEM_ID);
                     }
                 }
                 if (content.equals(ProductosListFragment.ARG_ITEM_ID)) {
@@ -89,16 +104,10 @@ public class MainActivity extends AppCompatActivity
                         contentFragment = fragmentManager.findFragmentByTag(ResumenFragment.ARG_ITEM_ID);
                     }
                 }
-                if (content.equals(PedidosListFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(PedidosListFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.title_fragment_pedidos);
-                        contentFragment = fragmentManager.findFragmentByTag(PedidosListFragment.ARG_ITEM_ID);
-                    }
-                }
-                if (content.equals(ClientesAgregarFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(ClientesAgregarFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.add_cliente);
-                        contentFragment = fragmentManager.findFragmentByTag(ClientesAgregarFragment.ARG_ITEM_ID);
+                if (content.equals(MapFragment.ARG_ITEM_ID)) {
+                    if (fragmentManager.findFragmentByTag(MapFragment.ARG_ITEM_ID) != null) {
+                        setTitle(R.string.title_fragment_map);
+                        contentFragment = fragmentManager.findFragmentByTag(MapFragment.ARG_ITEM_ID);
                     }
                 }
             }
@@ -107,8 +116,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        if (contentFragment instanceof ClientesAgregarFragment) {
+            outState.putString("content", ClientesAgregarFragment.ARG_ITEM_ID);
+        }
         if (contentFragment instanceof ClientesListFragment) {
             outState.putString("content", ClientesListFragment.ARG_ITEM_ID);
+        }
+        if (contentFragment instanceof PedidosAgregarFragment) {
+            outState.putString("content", PedidosAgregarFragment.ARG_ITEM_ID);
+        }
+        if (contentFragment instanceof PedidosListFragment) {
+            outState.putString("content", PedidosListFragment.ARG_ITEM_ID);
         }
         if (contentFragment instanceof ProductosListFragment) {
             outState.putString("content", ProductosListFragment.ARG_ITEM_ID);
@@ -116,11 +134,8 @@ public class MainActivity extends AppCompatActivity
         if (contentFragment instanceof ResumenFragment) {
             outState.putString("content", ResumenFragment.ARG_ITEM_ID);
         }
-        if (contentFragment instanceof PedidosListFragment) {
-            outState.putString("content", PedidosListFragment.ARG_ITEM_ID);
-        }
-        if (contentFragment instanceof ClientesAgregarFragment) {
-            outState.putString("content", ClientesAgregarFragment.ARG_ITEM_ID);
+        if (contentFragment instanceof MapFragment) {
+            outState.putString("content", MapFragment.ARG_ITEM_ID);
         }
         super.onSaveInstanceState(outState);
     }
@@ -170,6 +185,8 @@ public class MainActivity extends AppCompatActivity
             goToListaProductos();
         } else if (id == R.id.nav_caja) {
             goToResumen();
+        } else if (id == R.id.nav_ruta) {
+            goToRuta();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -196,7 +213,7 @@ public class MainActivity extends AppCompatActivity
     {
         ClientesListFragment fragment1 = new ClientesListFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putInt("id_vendedor", id_vendedor);
+        bundle1.putInt(ClientesListFragment.ARG_VENDEDOR_ID, id_vendedor);
         fragment1.setArguments(bundle1);
         switchContent(fragment1, ClientesListFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
@@ -206,7 +223,7 @@ public class MainActivity extends AppCompatActivity
     {
         ClientesAgregarFragment fragment = new ClientesAgregarFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putInt("id_vendedor", id_vendedor);
+        bundle1.putInt(ClientesAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
         fragment.setArguments(bundle1);
         switchContent(fragment, ClientesAgregarFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
@@ -216,9 +233,9 @@ public class MainActivity extends AppCompatActivity
     {
         ClientesAgregarFragment fragment = new ClientesAgregarFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putBoolean("editar", true);
-        bundle1.putInt("id_vendedor", id_vendedor);
-        bundle1.putInt("id_cliente", id_cliente);
+        bundle1.putBoolean(ClientesAgregarFragment.ARG_EDITAR, true);
+        bundle1.putInt(ClientesAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
+        bundle1.putInt(ClientesAgregarFragment.ARG_CLIENTE_ID, id_cliente);
         fragment.setArguments(bundle1);
         switchContent(fragment, ClientesAgregarFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
@@ -228,7 +245,7 @@ public class MainActivity extends AppCompatActivity
     {
         PedidosListFragment fragment1 = new PedidosListFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putInt("id_vendedor", id_vendedor);
+        bundle1.putInt(PedidosListFragment.ARG_VENDEDOR_ID, id_vendedor);
         fragment1.setArguments(bundle1);
         switchContent(fragment1, PedidosListFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
@@ -238,7 +255,7 @@ public class MainActivity extends AppCompatActivity
     {
         PedidosAgregarFragment fragment = new PedidosAgregarFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putInt("id_vendedor", id_vendedor);
+        bundle1.putInt(PedidosAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
         fragment.setArguments(bundle1);
         switchContent(fragment, PedidosAgregarFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
@@ -248,9 +265,9 @@ public class MainActivity extends AppCompatActivity
     {
         PedidosAgregarFragment fragment = new PedidosAgregarFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putBoolean("editar", true);
-        bundle1.putInt("id_vendedor", id_vendedor);
-        bundle1.putInt("id_pedido", id_pedido);
+        bundle1.putBoolean(PedidosAgregarFragment.ARG_EDITAR, true);
+        bundle1.putInt(PedidosAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
+        bundle1.putInt(PedidosAgregarFragment.ARG_PEDIDO_ID, id_pedido);
         fragment.setArguments(bundle1);
         switchContent(fragment, PedidosAgregarFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
@@ -258,7 +275,12 @@ public class MainActivity extends AppCompatActivity
 
     public void goToListaProductos()
     {
-        switchContent(new ProductosListFragment(), ProductosListFragment.ARG_ITEM_ID);
+        ProductosListFragment fragment = new ProductosListFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt(ProductosListFragment.ARG_VENDEDOR_ID, id_vendedor);
+        fragment.setArguments(bundle1);
+
+        switchContent(fragment, ProductosListFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
 
@@ -266,11 +288,20 @@ public class MainActivity extends AppCompatActivity
     {
         ResumenFragment fragment3 = new ResumenFragment();
         Bundle bundle3 = new Bundle();
-        bundle3.putInt("id_vendedor", id_vendedor);
+        bundle3.putInt(ResumenFragment.ARG_VENDEDOR_ID, id_vendedor);
         fragment3.setArguments(bundle3);
         switchContent(fragment3, ResumenFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
 
+    public void goToRuta() {
+        MapFragment fragment = new MapFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt(MapFragment.ARG_VENDEDOR_ID, id_vendedor);
+        fragment.setArguments(bundle1);
+
+        switchContent(fragment, MapFragment.ARG_ITEM_ID);
+        invalidateOptionsMenu();
+    }
 
 }
