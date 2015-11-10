@@ -15,6 +15,7 @@ Usuario: test
 Contraseña: test
 -------------------------------------------------
 
+
 Se rehizo el proyecto en Android Studio, debido a que en Eclipse daba multiple errores con las librerias, no encontraba las propiedades R y no se cargaba el mapa correctamente. Todos estos problemas se solucionaran al crear el proyecto en Android Studio.
 
 Se subio proyecto a GitHub, en https://github.com/samuelvasquez/Inacap
