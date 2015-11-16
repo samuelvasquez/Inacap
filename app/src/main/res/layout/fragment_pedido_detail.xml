@@ -1,0 +1,103 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:id="@+id/layout_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lbl_cliente_nombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/nombre_cliente" />
+
+        <TextView
+            android:id="@+id/txt_cliente_nombre"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/lbl_fecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/str_pedido_fecha" />
+
+        <TextView
+            android:id="@+id/txt_fecha"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/lbl_estado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/str_pedido_entregado" />
+
+        <TextView
+            android:id="@+id/txt_estado"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/lbl_detalles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_pedido_detalles" />
+
+        <TableLayout
+            android:id="@+id/detalle"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="0,1">
+
+            <TableRow
+                android:id="@+id/TableRow01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_pedido_producto"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_pedido_cantidad"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/TextView03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_pedido_precio"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/TextView04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_pedido_total"
+                    android:textStyle="bold"></TextView>
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

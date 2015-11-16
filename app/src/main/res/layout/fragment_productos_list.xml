@@ -1,17 +1,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="samuelvasquez.inacap.cl.unidad3.ProductosListFragment">
 
-    <ListView
-        android:id="@+id/list_producto"
+    <fragment
+        android:id="@+id/productos_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/transparent"
-        android:dividerHeight="10dp"
-        android:drawSelectorOnTop="true"
-        android:footerDividersEnabled="false"
-        android:padding="10dp"
-        android:scrollbarStyle="outsideOverlay" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" />
 
 </FrameLayout>

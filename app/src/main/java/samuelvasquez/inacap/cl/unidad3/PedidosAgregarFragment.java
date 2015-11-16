@@ -3,10 +3,11 @@ package samuelvasquez.inacap.cl.unidad3;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -58,7 +59,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
 
     public static final String ARG_EDITAR = "editar";
     public static final String ARG_PEDIDO_ID = "id_pedido";
-    public static final String ARG_VENDEDOR_ID = "id_vendedor";
+    // public static final String ARG_VENDEDOR_ID = "id_vendedor";
     Activity activity;
     private boolean editar = false;
     private int id_pedido;
@@ -97,12 +98,11 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
      * @return A new instance of fragment PedidosAgregarFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PedidosAgregarFragment newInstance(Boolean editar, int id_pedido, int id_vendedor) {
+    public static PedidosAgregarFragment newInstance(Boolean editar, int id_pedido) {
         PedidosAgregarFragment fragment = new PedidosAgregarFragment();
         Bundle args = new Bundle();
         args.putString(ARG_EDITAR, String.valueOf(editar));
         args.putString(ARG_PEDIDO_ID, String.valueOf(id_pedido));
-        args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
         fragment.setArguments(args);
         return fragment;
     }
@@ -111,6 +111,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
+        id_vendedor = ((MainActivity) activity).GetIdVendedor();
         daoCliente = new DAOCliente(activity);
         daoPedido = new DAOPedido(activity);
         daoProducto = new DAOProducto(activity);
@@ -118,13 +119,21 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
         if (getArguments() != null) {
             editar = getArguments().getBoolean(ARG_EDITAR);
             id_pedido = getArguments().getInt(ARG_PEDIDO_ID);
-            id_vendedor = getArguments().getInt(ARG_VENDEDOR_ID);
         }
         setHasOptionsMenu(true);
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            if (editar) {
+                toolbar.setTitle(getText(R.string.update_pedido));
+            } else {
+                toolbar.setTitle(getText(R.string.add_pedido));
+            }
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.form_cliente, menu);
     }
 
@@ -134,6 +143,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_pedidos_agregar, container, false);
         View rootView = inflater.inflate(R.layout.fragment_pedidos_agregar, container, false);
+        id_vendedor = ((MainActivity) activity).GetIdVendedor();
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 

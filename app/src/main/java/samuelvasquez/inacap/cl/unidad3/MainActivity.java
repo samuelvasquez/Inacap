@@ -1,28 +1,32 @@
 package samuelvasquez.inacap.cl.unidad3;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener
+        , ClientesListFragment.Callbacks
+        , PedidosListFragment.Callbacks {
 
     private static final String ARG_VENDEDOR_ID = "id_vendedor";
-
+    //private Fragment contentFragment;
+    ActionBarDrawerToggle toggle;
     private int id_vendedor;
-
-    private Fragment contentFragment;
-
+    private boolean VistaClientesExtendida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,37 +37,41 @@ public class MainActivity extends AppCompatActivity
         Bundle extra = intent.getExtras();
         if (extra != null)
         {
-            if (extra.containsKey("id_vendedor"))
+            if (extra.containsKey(ARG_VENDEDOR_ID))
             {
-                id_vendedor = extra.getInt("id_vendedor");
+                id_vendedor = extra.getInt(ARG_VENDEDOR_ID);
             }
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        setTitle(getText(R.string.app_name));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
         drawer.setDrawerListener(toggle);
+        //drawer.openDrawer(GravityCompat.START);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setHomeButtonEnabled(true);
-
-        FragmentManager fragmentManager = getFragmentManager();
+        /*
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("content")) {
                 String content = savedInstanceState.getString("content");
@@ -112,15 +120,17 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+        */
     }
 
+/*
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if (contentFragment instanceof ClientesAgregarFragment) {
+      if (contentFragment instanceof ClientesAgregarFragment) {
             outState.putString("content", ClientesAgregarFragment.ARG_ITEM_ID);
         }
-        if (contentFragment instanceof ClientesListFragment) {
-            outState.putString("content", ClientesListFragment.ARG_ITEM_ID);
+        if (contentFragment instanceof ClientesFragment) {
+            outState.putString("content", ClientesFragment.ARG_ITEM_ID);
         }
         if (contentFragment instanceof PedidosAgregarFragment) {
             outState.putString("content", PedidosAgregarFragment.ARG_ITEM_ID);
@@ -139,6 +149,7 @@ public class MainActivity extends AppCompatActivity
         }
         super.onSaveInstanceState(outState);
     }
+    */
 
     @Override
     public void onBackPressed() {
@@ -154,7 +165,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -168,6 +184,12 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         */
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (toggle != null) {
+            if (toggle.onOptionsItemSelected(item)) {
+                return true;
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -176,7 +198,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_clientes) {
             goToClientes();
         } else if (id == R.id.nav_pedidos) {
@@ -194,37 +215,83 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onClienteItemSelected(int id) {
+        if (findViewById(R.id.cliente_detail_container) != null) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(ClienteDetailFragment.ARG_CLIENTE_ID, id);
+            ClienteDetailFragment fragment = new ClienteDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.cliente_detail_container, fragment)
+                    .commit();
+
+        } else {
+            goToDetalleCliente(id);
+        }
+    }
+
+    @Override
+    public void onPedidoItemSelected(int id) {
+        if (findViewById(R.id.pedido_detail_container) != null) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(PedidoDetailFragment.ARG_PEDIDO_ID, id);
+            PedidoDetailFragment fragment = new PedidoDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.pedido_detail_container, fragment)
+                    .commit();
+
+        } else {
+            goToDetallePedido(id);
+        }
+    }
+
+
     public void switchContent(Fragment fragment, String tag) {
-        FragmentManager fragmentManager = getFragmentManager();
+        Log.d("switchContent", tag);
+        FragmentManager fragmentManager = getSupportFragmentManager();
         while (fragmentManager.popBackStackImmediate())
             ;
 
         if (fragment != null) {
             FragmentTransaction transaction = fragmentManager
                     .beginTransaction();
-            transaction.replace(R.id.content_frame, fragment, tag);
+            transaction.replace(R.id.content_frame_main, fragment, tag);
 
             transaction.commit();
-            contentFragment = fragment;
+            //contentFragment = fragment;
         }
+        Log.d("switchContent", tag + " ok");
+
+    }
+
+    public int GetIdVendedor() {
+        return id_vendedor;
     }
 
     public void goToClientes()
     {
-        ClientesListFragment fragment1 = new ClientesListFragment();
-        Bundle bundle1 = new Bundle();
-        bundle1.putInt(ClientesListFragment.ARG_VENDEDOR_ID, id_vendedor);
-        fragment1.setArguments(bundle1);
-        switchContent(fragment1, ClientesListFragment.ARG_ITEM_ID);
+        ClientesFragment fragment1 = new ClientesFragment();
+        switchContent(fragment1, ClientesFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
 
     public void goToAddCliente()
     {
         ClientesAgregarFragment fragment = new ClientesAgregarFragment();
-        Bundle bundle1 = new Bundle();
-        bundle1.putInt(ClientesAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
-        fragment.setArguments(bundle1);
         switchContent(fragment, ClientesAgregarFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
@@ -234,29 +301,40 @@ public class MainActivity extends AppCompatActivity
         ClientesAgregarFragment fragment = new ClientesAgregarFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putBoolean(ClientesAgregarFragment.ARG_EDITAR, true);
-        bundle1.putInt(ClientesAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
         bundle1.putInt(ClientesAgregarFragment.ARG_CLIENTE_ID, id_cliente);
         fragment.setArguments(bundle1);
         switchContent(fragment, ClientesAgregarFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
 
+    public void goToDetalleCliente(int id_cliente) {
+        ClienteDetailFragment fragment = new ClienteDetailFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt(ClienteDetailFragment.ARG_CLIENTE_ID, id_cliente);
+        fragment.setArguments(bundle1);
+        switchContent(fragment, ClienteDetailFragment.ARG_ITEM_ID);
+        invalidateOptionsMenu();
+    }
+
     public void goToPedidos()
     {
-        PedidosListFragment fragment1 = new PedidosListFragment();
+        PedidosFragment fragment1 = new PedidosFragment();
+        switchContent(fragment1, PedidosFragment.ARG_ITEM_ID);
+        invalidateOptionsMenu();
+    }
+
+    public void goToDetallePedido(int id_pedido) {
+        PedidoDetailFragment fragment = new PedidoDetailFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putInt(PedidosListFragment.ARG_VENDEDOR_ID, id_vendedor);
-        fragment1.setArguments(bundle1);
-        switchContent(fragment1, PedidosListFragment.ARG_ITEM_ID);
+        bundle1.putInt(PedidoDetailFragment.ARG_PEDIDO_ID, id_pedido);
+        fragment.setArguments(bundle1);
+        switchContent(fragment, PedidoDetailFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
 
     public void goToAddPedido()
     {
         PedidosAgregarFragment fragment = new PedidosAgregarFragment();
-        Bundle bundle1 = new Bundle();
-        bundle1.putInt(PedidosAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
-        fragment.setArguments(bundle1);
         switchContent(fragment, PedidosAgregarFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
@@ -266,7 +344,6 @@ public class MainActivity extends AppCompatActivity
         PedidosAgregarFragment fragment = new PedidosAgregarFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putBoolean(PedidosAgregarFragment.ARG_EDITAR, true);
-        bundle1.putInt(PedidosAgregarFragment.ARG_VENDEDOR_ID, id_vendedor);
         bundle1.putInt(PedidosAgregarFragment.ARG_PEDIDO_ID, id_pedido);
         fragment.setArguments(bundle1);
         switchContent(fragment, PedidosAgregarFragment.ARG_ITEM_ID);
@@ -276,30 +353,19 @@ public class MainActivity extends AppCompatActivity
     public void goToListaProductos()
     {
         ProductosListFragment fragment = new ProductosListFragment();
-        Bundle bundle1 = new Bundle();
-        bundle1.putInt(ProductosListFragment.ARG_VENDEDOR_ID, id_vendedor);
-        fragment.setArguments(bundle1);
-
         switchContent(fragment, ProductosListFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
 
     public void goToResumen()
     {
-        ResumenFragment fragment3 = new ResumenFragment();
-        Bundle bundle3 = new Bundle();
-        bundle3.putInt(ResumenFragment.ARG_VENDEDOR_ID, id_vendedor);
-        fragment3.setArguments(bundle3);
-        switchContent(fragment3, ResumenFragment.ARG_ITEM_ID);
+        ResumenFragment fragment = new ResumenFragment();
+        switchContent(fragment, ResumenFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
 
     public void goToRuta() {
         MapFragment fragment = new MapFragment();
-        Bundle bundle1 = new Bundle();
-        bundle1.putInt(MapFragment.ARG_VENDEDOR_ID, id_vendedor);
-        fragment.setArguments(bundle1);
-
         switchContent(fragment, MapFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }

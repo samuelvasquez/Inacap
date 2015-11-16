@@ -1,7 +1,9 @@
 package samuelvasquez.inacap.cl.unidad3.datamodel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class Pedido {
     // Propiedades
@@ -22,7 +24,10 @@ public class Pedido {
     // Sobreescribe metodo toString() de la clase Pedido
     public String toString()
     {
-        return String.valueOf(this.id);
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        return String.valueOf(dateFormatter.format(this.fecha_entrega) + "\n"
+                + this.nombre_cliente + "\n" +
+                (this.entregado ? "Entregado" : "Pendiente"));
     }
 }
 

@@ -10,12 +10,21 @@
     <string name="str_login_password">Contraseña:</string>
     <string name="str_login_ingresar">Ingresar</string>
 
-    <string name="title_fragment_clientes">Administracion de Clientes</string>
-    <string name="title_fragment_pedidos">Entrega de pedidos</string>
-    <string name="title_fragment_productos">Listar productos</string>
+    <string name="menu_clientes">Administracion de Clientes</string>
+    <string name="menu_pedidos">Entrega de pedidos</string>
+    <string name="menu_productos">Listar productos</string>
+    <string name="menu_resumen">Resumen de caja</string>
+    <string name="menu_map">Ver Ruta</string>
+
+    <string name="title_fragment_clientes">Clientes</string>
+    <string name="title_fragment_details_cliente">Detalle Cliente</string>
+
+    <string name="title_fragment_pedidos">Pedidos</string>
+    <string name="title_fragment_productos">Productos</string>
     <string name="title_fragment_resumen">Resumen de caja</string>
     <string name="title_fragment_map">Ver Ruta</string>
 
+    <string name="title_activity_maps">Map</string>
 
     <string name="fragment_productos_empty">Sin productos</string>
     <string name="fragment_clientes_empty">Sin clientes</string>
@@ -47,11 +56,13 @@
     <string name="str_pedido_precio">Precio Unit.</string>
     <string name="str_pedido_total">Total</string>
 
-    <string name="update">Modificar</string>
+    <string name="update">Guardar</string>
     <string name="add">Agregar</string>
     <string name="reset">Limpiar</string>
     <string name="cancel">Cancelar</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="title_activity_maps">Map</string>
+
 </resources>

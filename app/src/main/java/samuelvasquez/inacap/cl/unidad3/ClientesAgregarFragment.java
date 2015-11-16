@@ -2,10 +2,11 @@ package samuelvasquez.inacap.cl.unidad3;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -75,16 +76,26 @@ public class ClientesAgregarFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = getActivity();
         dao = new DAOCliente(getActivity());
+        id_vendedor = ((MainActivity) activity).GetIdVendedor();
         if (getArguments() != null) {
             editar = getArguments().getBoolean(ARG_EDITAR);
             id_cliente = getArguments().getInt(ARG_CLIENTE_ID);
-            id_vendedor = getArguments().getInt(ARG_VENDEDOR_ID);
         }
         setHasOptionsMenu(true);
+
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            if (editar) {
+                toolbar.setTitle(getText(R.string.update_cliente));
+            } else {
+                toolbar.setTitle(getText(R.string.add_cliente));
+            }
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.form_cliente, menu);
     }
 
@@ -95,6 +106,7 @@ public class ClientesAgregarFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_clientes_agregar, container, false);
 
         View rootView = inflater.inflate(R.layout.fragment_clientes_agregar, container, false);
+
         findViewsById(rootView);
         if(editar)
         {
@@ -108,6 +120,7 @@ public class ClientesAgregarFragment extends Fragment {
                 etxt_longuitud.setText(String.valueOf(cliente.longuitud));
             }
         }
+
         etxt_nombre.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 Validation.hasText(etxt_nombre);

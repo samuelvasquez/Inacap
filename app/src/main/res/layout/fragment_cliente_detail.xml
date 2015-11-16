@@ -1,0 +1,84 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:id="@+id/layout_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lbl_cliente_nombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/nombre_cliente" />
+
+        <TextView
+            android:id="@+id/txt_cliente_nombre"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/lbl_cliente_direccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/direccion_cliente" />
+
+        <TextView
+            android:id="@+id/txt_cliente_direccion"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/lbl_cliente_telefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/telefono_cliente" />
+
+        <TextView
+            android:id="@+id/txt_cliente_telefono"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/lbl_cliente_latitud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/latitud_cliente" />
+
+        <TextView
+            android:id="@+id/txt_cliente_latitud"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/lbl_cliente_longuitud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/longuitud_cliente" />
+
+        <TextView
+            android:id="@+id/txt_cliente_longuitud"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp" />
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

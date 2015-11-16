@@ -61,12 +61,12 @@ public class DAOCliente {
         {
             throw new NullPointerException("Debe ingresar telefono");
         }
-        if (cliente.latitud == 0) {
+        /*if (cliente.latitud == 0) {
             throw new NullPointerException("Debe ingresar latitud");
         }
         if (cliente.longuitud == 0) {
             throw new NullPointerException("Debe ingresar longuitud");
-        }
+        }*/
 
         ContentValues values = new ContentValues();
         values.put("NOMBRE", cliente.nombre);

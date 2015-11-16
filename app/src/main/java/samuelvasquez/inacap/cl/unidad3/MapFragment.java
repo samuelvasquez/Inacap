@@ -1,9 +1,12 @@
 package samuelvasquez.inacap.cl.unidad3;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -33,7 +36,7 @@ import samuelvasquez.inacap.cl.unidad3.datamodel.Cliente;
 public class MapFragment extends Fragment {
     public static final String ARG_ITEM_ID = "map";
 
-    public static final String ARG_VENDEDOR_ID = "id_vendedor";
+    //public static final String ARG_VENDEDOR_ID = "id_vendedor";
     Activity activity;
     DAOCliente clienteDAO;
     MapView mMapView;
@@ -50,11 +53,8 @@ public class MapFragment extends Fragment {
      *
      * @return A new instance of fragment ClientesListFragment.
      */
-    public static MapFragment newInstance(int id_vendedor) {
+    public static MapFragment newInstance() {
         MapFragment fragment = new MapFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -63,8 +63,14 @@ public class MapFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = getActivity();
         clienteDAO = new DAOCliente(activity);
-        if (getArguments() != null) {
-            id_vendedor = getArguments().getInt(ARG_VENDEDOR_ID);
+        id_vendedor = ((MainActivity) activity).GetIdVendedor();
+
+
+        setHasOptionsMenu(true);
+
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(getText(R.string.title_fragment_map));
         }
     }
 
@@ -116,6 +122,11 @@ public class MapFragment extends Fragment {
                 .newCameraPosition(cameraPosition));
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
     }
 
     @Override

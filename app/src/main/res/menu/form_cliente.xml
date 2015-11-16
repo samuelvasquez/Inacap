@@ -6,12 +6,12 @@
         android:id="@+id/action_save"
         android:icon="@android:drawable/ic_menu_save"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:title="@string/update"/>
+        android:title="@string/update"
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/action_revert"
         android:icon="@android:drawable/ic_menu_revert"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:title="@string/cancel"/>
+        android:title="@string/cancel"
+        app:showAsAction="ifRoom|withText" />
 </menu>

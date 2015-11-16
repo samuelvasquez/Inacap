@@ -1,17 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pedidos_list"
+    android:name="samuelvasquez.inacap.cl.unidad3.PedidosListFragment"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="samuelvasquez.inacap.cl.unidad3.PedidosListFragment">
-
-    <ListView
-        android:id="@+id/list_pedidos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@color/transparent"
-        android:dividerHeight="10dp"
-        android:drawSelectorOnTop="true"
-        android:footerDividersEnabled="false"
-        android:padding="10dp"
-        android:scrollbarStyle="outsideOverlay" />
-
-</FrameLayout>
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    tools:context=".MainActivity" />

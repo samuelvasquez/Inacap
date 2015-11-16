@@ -1,25 +1,19 @@
 package samuelvasquez.inacap.cl.unidad3;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOProducto;
-import samuelvasquez.inacap.cl.unidad3.dataaccess.ProductoListAdapter;
 import samuelvasquez.inacap.cl.unidad3.datamodel.Producto;
 
 
@@ -31,21 +25,35 @@ import samuelvasquez.inacap.cl.unidad3.datamodel.Producto;
  * Use the {@link ProductosListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductosListFragment extends Fragment {
+public class ProductosListFragment extends ListFragment {
     public static final String ARG_ITEM_ID = "productos_list";
-
-    public static final String ARG_VENDEDOR_ID = "id_vendedor";
+    /**
+     * The serialization (saved instance state) Bundle key representing the
+     * activated item position. Only used on tablets.
+     */
+    private static final String STATE_ACTIVATED_POSITION = "clientes_activated_position";
+    /**
+     * A dummy implementation of the {@link Callbacks} interface that does
+     * nothing. Used only when this fragment is not attached to an activity.
+     */
+    private static Callbacks sDummyCallbacks = new Callbacks() {
+        @Override
+        public void onClienteItemSelected(int id) {
+        }
+    };
+    // UI references
     Activity activity;
     ArrayList<Producto> productos;
-    Producto producto;
-    ProductoListAdapter productoListAdapter;
     DAOProducto productoDAO;
-    // UI references
-    ListView list_producto;
-    private int id_vendedor;
-    private GetProductosTask task;
-    private ActionMode mActionMode;
-    private OnFragmentInteractionListener mListener;
+    /**
+     * The fragment's current callback object, which is notified of list item
+     * clicks.
+     */
+    private Callbacks mCallbacks = sDummyCallbacks;
+    /**
+     * The current activated item position. Only used on tablets.
+     */
+    private int mActivatedPosition = ListView.INVALID_POSITION;
 
     public ProductosListFragment() {
         // Required empty public constructor
@@ -58,138 +66,115 @@ public class ProductosListFragment extends Fragment {
      * @return A new instance of fragment ProductosListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProductosListFragment newInstance(int id_vendedor) {
+    public static ProductosListFragment newInstance() {
         ProductosListFragment fragment = new ProductosListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_VENDEDOR_ID, String.valueOf(id_vendedor));
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         activity = getActivity();
         productoDAO = new DAOProducto(activity);
-        if (getArguments() != null) {
-            id_vendedor = getArguments().getInt(ARG_VENDEDOR_ID);
-        }
         setHasOptionsMenu(true);
+
+        productos = productoDAO.getAllProductos();
+
+        setListAdapter(new ArrayAdapter<Producto>(
+                activity,
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                productos));
+        Log.d("onCreate", "list adapter ok");
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Restore the previously serialized activated item position.
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+/*
+        // Activities containing this fragment must implement its callbacks.
+        if (!(activity instanceof Callbacks)) {
+            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+        }
+
+        mCallbacks = (Callbacks) activity;*/
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        // Reset the active callbacks interface to the dummy implementation.
+        mCallbacks = sDummyCallbacks;
+    }
+
+    @Override
+    public void onListItemClick(ListView listView, View view, int position, long id) {
+        super.onListItemClick(listView, view, position, id);
+
+        // Notify the active callbacks interface (the activity, if the
+        // fragment is attached to one) that an item has been selected.
+        mCallbacks.onClienteItemSelected(productos.get(position).id);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mActivatedPosition != ListView.INVALID_POSITION) {
+            // Serialize and persist the activated item position.
+            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+        }
+    }
+
+    /**
+     * Turns on activate-on-click mode. When this mode is on, list items will be
+     * given the 'activated' state when touched.
+     */
+    public void setActivateOnItemClick(boolean activateOnItemClick) {
+        // When setting CHOICE_MODE_SINGLE, ListView will automatically
+        // give items the 'activated' state when touched.
+        getListView().setChoiceMode(activateOnItemClick
+                ? ListView.CHOICE_MODE_SINGLE
+                : ListView.CHOICE_MODE_NONE);
+    }
+
+    private void setActivatedPosition(int position) {
+        if (position == ListView.INVALID_POSITION) {
+            getListView().setItemChecked(mActivatedPosition, false);
+        } else {
+            getListView().setItemChecked(position, true);
+        }
+
+        mActivatedPosition = position;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_producto, menu);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_productos_list, container, false);
-        View rootView = inflater.inflate(R.layout.fragment_productos_list, container, false);
-        findViewsById(rootView);
-
-        task = new GetProductosTask(activity);
-        task.execute((Void) null);
-
-        return rootView;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-/*
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-*/
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onResume() {
-        getActivity().setTitle(R.string.title_fragment_productos);
-        //getActivity().getActionBar().setTitle(R.string.title_fragment_productos);
-        super.onResume();
-    }
-
-    private void findViewsById(View view) {
-        list_producto = (ListView) view.findViewById(R.id.list_producto);
-    }
-
-    /*
-         * This method is invoked from MainActivity onFinishDialog() method. It is
-	     * called from CustomEmpDialogFragment when an employee record is updated.
-	     * This is used for communicating between fragments.
-	     */
-    public void updateView() {
-        task = new GetProductosTask(activity);
-        task.execute((Void) null);
+        menu.clear();
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface Callbacks {
+        /**
+         * Callback for when an item has been selected.
+         */
+        void onClienteItemSelected(int id);
     }
-
-    public class GetProductosTask extends AsyncTask<Void, Void, ArrayList<Producto>> {
-
-        private final WeakReference<Activity> activityWeakRef;
-
-        public GetProductosTask(Activity context) {
-            this.activityWeakRef = new WeakReference<Activity>(context);
-        }
-
-        @Override
-        protected ArrayList<Producto> doInBackground(Void... arg0) {
-            ArrayList<Producto> productoList = productoDAO.getAllProductos();
-            return productoList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Producto> productoList) {
-            if (activityWeakRef.get() != null
-                    && !activityWeakRef.get().isFinishing()) {
-                Log.d("cliente", productoList.toString());
-                productos = productoList;
-                if (productoList != null) {
-                    if (productoList.size() != 0) {
-                        productoListAdapter = new ProductoListAdapter(activity,
-                                productoList);
-                        list_producto.setAdapter(productoListAdapter);
-                    } else {
-                        Toast.makeText(activity, "Sin productos",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-
-            }
-        }
-    }
-
-
 }
