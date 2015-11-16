@@ -17,7 +17,10 @@ Contraseña: test
 Se cambio completamente el diseño grafico de la aplicacion, siguiendo las guias del Material Design.
 
 En las pantallas de clientes y entrega de pedidos, se configuraron dos layout distintos. Para pantallas menores a 480 dp de ancho, se muestra el listado de elementos y al hacer clic se cambia a otra pantalla con el detalle del cliente o pedido.
+
 En caso de pantallas con mas de 480 dp de ancho se muestra el listado de elementos en el sidebar, y el detalle en la misma pantalla.
+
+Para probar la diferencias de layout, se propone usar la aplicacion con la pantalla horizontal y vertical. Asi tendra un mayor ancho y podra visualizar el efecto de la pantalla combinada.
 
 Se incorporo boton flotante para la opcion "Agregar" y botones en el Action Bar para Modificar, Eliminar, Guardar y Cancelar.
 
