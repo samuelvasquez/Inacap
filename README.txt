@@ -26,8 +26,6 @@ Se incorporo boton flotante para la opcion "Agregar" y botones en el Action Bar 
 
 Se subio proyecto a GitHub, en https://github.com/samuelvasquez/Inacap, version 3.0
 
-El ZIP con la tarea se encuentra en 
-
 La Google API KEY se registra en el archivo \app\src\debug\res\values\google_maps_api.xml
 
 El mapa opera cargando los pedidos del vendedor que se encuentren pendiente. Por lo que para visualizar los clientes en el mapa, primero debe crear al menos un pedido y dejarno pendiente (no entregado)
