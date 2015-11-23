@@ -100,7 +100,7 @@ public class MapFragment extends Fragment {
 
         ArrayList<Cliente> lista = clienteDAO.getClientesPendientesByIdVendedor(id_vendedor);
         if (lista.size() == 0) {
-            Toast.makeText(activity, "No hay clientes con pedidos pendientes",
+            Toast.makeText(activity, getText(R.string.no_pedidos_pendientes),
                     Toast.LENGTH_LONG).show();
 
         } else {

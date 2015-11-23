@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -88,6 +89,10 @@ public class ProductosListFragment extends ListFragment {
                 productos));
         Log.d("onCreate", "list adapter ok");
 
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(getText(R.string.title_fragment_productos));
+        }
     }
 
     @Override

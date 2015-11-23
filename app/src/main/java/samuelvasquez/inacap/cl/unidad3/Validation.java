@@ -1,8 +1,9 @@
 package samuelvasquez.inacap.cl.unidad3;
 
 
-import java.util.regex.Pattern;
 import android.widget.EditText;
+
+import java.util.regex.Pattern;
 
 public class Validation {
 
@@ -14,15 +15,11 @@ public class Validation {
     private static final String DOUBLE_REGEX = "^[+-]?[0-9]+(\\.[0-9]+)?$";
 
     // Error Messages
-    private static final String REQUIRED_MSG = "Requerido";
-    private static final String EMAIL_MSG = "Email no valido";
     private static final String PHONE_MSG = "###-#######";
-    private static final String NUMERIC_MSG = "Numerico";
-    private static final String DOUBLE_MSG = "Decimal";
 
     // call this method when you need to check email validation
     public static boolean isEmailAddress(EditText editText, boolean required) {
-        return isValid(editText, EMAIL_REGEX, EMAIL_MSG, required);
+        return isValid(editText, EMAIL_REGEX, editText.getContext().getText(R.string.validacion_email).toString(), required);
     }
 
     // call this method when you need to check phone number validation
@@ -31,11 +28,11 @@ public class Validation {
     }
 
     public static boolean isNumber(EditText editText, boolean required) {
-        return isValid(editText, NUMERIC_REGEX, NUMERIC_MSG, required);
+        return isValid(editText, NUMERIC_REGEX, editText.getContext().getText(R.string.validacion_numerico).toString(), required);
     }
 
     public static boolean isDouble(EditText editText, boolean required) {
-        return isValid(editText, DOUBLE_REGEX, DOUBLE_MSG, required);
+        return isValid(editText, DOUBLE_REGEX, editText.getContext().getText(R.string.validacion_decimal).toString(), required);
     }
 
     // return true if the input field is valid, based on the parameter passed
@@ -52,7 +49,7 @@ public class Validation {
         if (required && !Pattern.matches(regex, text)) {
             editText.setError(errMsg);
             return false;
-        };
+        }
 
         return true;
     }
@@ -71,11 +68,13 @@ public class Validation {
 
         // length 0 means there is no text
         if (text.length() == 0) {
-            editText.setError(REQUIRED_MSG);
+            editText.setError(editText.getContext().getText(R.string.validacion_requerido).toString());
             return false;
         }
         else if (text.length() < largo_minimo) {
-            editText.setError("Largo minimo: " + String.valueOf(largo_minimo) + " caracteres.");
+            editText.setError(editText.getContext().getText(R.string.validacion_largo_minimo).toString()
+                    + " " + String.valueOf(largo_minimo) + " "
+                    + editText.getContext().getText(R.string.validacion_caracteres).toString());
             return false;
         }
 

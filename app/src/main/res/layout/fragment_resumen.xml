@@ -18,7 +18,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="Total Entregas" />
+                android:text="@string/str_resumen_total_entregas" />
 
             <TextView
                 android:id="@+id/lbl_valor_total_entregas"
@@ -43,7 +43,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
             android:padding="10dp"
-            android:text="Total Pedidos" />
+                android:text="@string/str_resumen_total_pedidos" />
 
         <TextView
             android:id="@+id/lbl_valor_total_pedidos"
@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
             android:padding="10dp"
-            android:text="Saldo" />
+                android:text="@string/str_resumen_saldo" />
 
         <TextView
             android:id="@+id/lbl_valor_saldo"

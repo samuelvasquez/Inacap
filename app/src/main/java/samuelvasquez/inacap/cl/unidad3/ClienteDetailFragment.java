@@ -111,14 +111,14 @@ public class ClienteDetailFragment extends Fragment {
      */
     private void confirmarBorrado() {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(activity);
-        dialogo1.setTitle("Confirmacion");
-        dialogo1.setMessage("Esta seguro de eliminar este cliente?");
-        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+        dialogo1.setTitle(getText(R.string.confirmacion));
+        dialogo1.setMessage(getText(R.string.cliente_eliminar));
+        dialogo1.setPositiveButton(getText(R.string.si), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 borrarCliente();
             }
         });
-        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        dialogo1.setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 return;
             }

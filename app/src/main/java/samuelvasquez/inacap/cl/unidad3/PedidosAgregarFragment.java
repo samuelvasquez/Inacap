@@ -30,12 +30,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOCliente;
 import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOPedido;
@@ -145,7 +145,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
         View rootView = inflater.inflate(R.layout.fragment_pedidos_agregar, container, false);
         id_vendedor = ((MainActivity) activity).GetIdVendedor();
 
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        dateFormatter = ((SimpleDateFormat) DateFormat.getDateInstance());
 
         findViewsById(rootView);
         setDateTimeField();
@@ -175,7 +175,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
                 if (checkValidationDetalle())
                     confirmarRegistroDetalle();
                 else
-                    Toast.makeText(activity, "Debe corregir los errores para continuar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, getText(R.string.hay_errores), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -272,7 +272,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
                 if (checkValidation())
                     confirmarRegistro();
                 else
-                    Toast.makeText(activity, "Debe corregir los errores para continuar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, getText(R.string.hay_errores), Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_revert:
                 ((MainActivity) activity).goToPedidos();
@@ -365,20 +365,20 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
     private void confirmarRegistro()
     {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this.activity);
-        dialogo1.setTitle("Confirmacion");
+        dialogo1.setTitle(getText(R.string.confirmacion));
         if(!editar){
-            dialogo1.setMessage("Esta seguro de agregar este pedido?");
+            dialogo1.setMessage(getText(R.string.pedido_agregar));
         }
         else
         {
-            dialogo1.setMessage("Esta seguro de modificar este pedido?");
+            dialogo1.setMessage(getText(R.string.pedido_modificar));
         }
-        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+        dialogo1.setPositiveButton(getText(R.string.si), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 validarPedido();
             }
         });
-        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        dialogo1.setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 return;
             }
@@ -398,7 +398,7 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
     {
         if(txt_fecha.getText().toString().trim().equals(""))
         {
-            Toast.makeText(activity, "Debe ingresar fecha", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.pedido_fecha_requerido), Toast.LENGTH_LONG).show();
             txt_fecha.requestFocus();
             return;
         }
@@ -407,12 +407,12 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
         if(!editar)
         {
             daoPedido.save(pedido);
-            Toast.makeText(activity, "Pedido agregado correctamente", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.pedido_agregar_ok), Toast.LENGTH_LONG).show();
         }
         else
         {
             daoPedido.update(pedido);
-            Toast.makeText(activity, "Pedido modificado correctamente", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.pedido_modificar_ok), Toast.LENGTH_LONG).show();
         }
 
         ((MainActivity)activity).goToPedidos();
@@ -421,15 +421,15 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
     private void confirmarRegistroDetalle()
     {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this.activity);
-        dialogo1.setTitle("Confirmacion");
-        dialogo1.setMessage("Esta seguro de agregar este detalle?");
+        dialogo1.setTitle(getText(R.string.confirmacion));
+        dialogo1.setMessage(getText(R.string.pedido_detalle_agregar));
 
-        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+        dialogo1.setPositiveButton(getText(R.string.si), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 validarPedidoDetalle();
             }
         });
-        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        dialogo1.setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 return;
             }
@@ -459,13 +459,13 @@ public class PedidosAgregarFragment extends Fragment implements View.OnClickList
     {
         if(txt_cantidad.getText().toString().trim().equals(""))
         {
-            Toast.makeText(activity, "Debe ingresar cantidad", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.pedido_detalle_cantidad_requerido), Toast.LENGTH_LONG).show();
             txt_cantidad.requestFocus();
             return;
         }
         if(txt_precio.getText().toString().trim().equals(""))
         {
-            Toast.makeText(activity, "Debe ingresar precio", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.pedido_detalle_precio_requerido), Toast.LENGTH_LONG).show();
             txt_precio.requestFocus();
             return;
         }

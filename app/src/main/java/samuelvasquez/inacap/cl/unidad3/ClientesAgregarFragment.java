@@ -196,7 +196,7 @@ public class ClientesAgregarFragment extends Fragment {
                 if (checkValidation())
                     confirmarRegistro();
                 else
-                    Toast.makeText(activity, "Debe corregir los errores para continuar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, getText(R.string.hay_errores), Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_revert:
                 ((MainActivity) activity).goToClientes();
@@ -252,20 +252,20 @@ public class ClientesAgregarFragment extends Fragment {
     private void confirmarRegistro()
     {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this.activity);
-        dialogo1.setTitle("Confirmacion");
+        dialogo1.setTitle(getText(R.string.confirmacion));
         if(!editar){
-            dialogo1.setMessage("Esta seguro de agregar este cliente?");
+            dialogo1.setMessage(getText(R.string.cliente_agregar));
         }
         else
         {
-            dialogo1.setMessage("Esta seguro de modificar este cliente?");
+            dialogo1.setMessage(getText(R.string.cliente_modificar));
         }
-        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+        dialogo1.setPositiveButton(getText(R.string.si), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 validarCliente();
             }
         });
-        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        dialogo1.setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 return;
             }
@@ -290,31 +290,31 @@ public class ClientesAgregarFragment extends Fragment {
      **/
     private void validarCliente() {
         if (etxt_nombre.getText().toString().trim().equals("")) {
-            Toast.makeText(activity, "Debe ingresar un nombre", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.cliente_nombre_requerido), Toast.LENGTH_LONG).show();
             etxt_nombre.requestFocus();
             return;
         }
 
         if (etxt_direccion.getText().toString().trim().equals("")) {
-            Toast.makeText(activity, "Debe ingresar direccion", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.cliente_direccion_requerido), Toast.LENGTH_LONG).show();
             etxt_direccion.requestFocus();
             return;
         }
 
         if (etxt_telefono.getText().toString().trim().equals("")) {
-            Toast.makeText(activity, "Debe ingresar telefono", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.cliente_telefono_requerido), Toast.LENGTH_LONG).show();
             etxt_telefono.requestFocus();
             return;
         }
 
         if (etxt_latitud.getText().toString().trim().equals("")) {
-            Toast.makeText(activity, "Debe ingresar latitud", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.cliente_latitud_requerido), Toast.LENGTH_LONG).show();
             etxt_latitud.requestFocus();
             return;
         }
 
         if (etxt_longuitud.getText().toString().trim().equals("")) {
-            Toast.makeText(activity, "Debe ingresar longuitud", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.cliente_longuitud_requerido), Toast.LENGTH_LONG).show();
             etxt_longuitud.requestFocus();
             return;
         }
@@ -322,10 +322,10 @@ public class ClientesAgregarFragment extends Fragment {
         Cliente cliente = setCliente();
         if (!editar) {
             dao.save(cliente);
-            Toast.makeText(activity, "Cliente agregado correctamente", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.cliente_agregar_ok), Toast.LENGTH_LONG).show();
         } else {
             dao.update(cliente);
-            Toast.makeText(activity, "Cliente modificado correctamente", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getText(R.string.cliente_modificar_ok), Toast.LENGTH_LONG).show();
         }
 
         ((MainActivity) activity).goToClientes();

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import samuelvasquez.inacap.cl.unidad3.R;
 import samuelvasquez.inacap.cl.unidad3.datamodel.Cliente;
 import samuelvasquez.inacap.cl.unidad3.datamodel.Usuario;
 
@@ -46,20 +47,20 @@ public class DAOCliente {
         // Valido que el cliente exista
         Cliente _cliente = getCliente(cliente.id);
         if(_cliente == null)
-            throw new NullPointerException("No se encuentra informacion de cliente");
+            throw new NullPointerException(mContext.getText(R.string.cliente_null).toString());
 
         // Validacion de campos obligatorios
         if (cliente.nombre.trim().equals(""))
         {
-            throw new NullPointerException("Debe ingresar nombre");
+            throw new NullPointerException(mContext.getText(R.string.cliente_nombre_requerido).toString());
         }
         if (cliente.direccion.trim().equals(""))
         {
-            throw new NullPointerException("Debe ingresar direccion");
+            throw new NullPointerException(mContext.getText(R.string.cliente_direccion_requerido).toString());
         }
         if (cliente.telefono.trim().equals(""))
         {
-            throw new NullPointerException("Debe ingresar telefono");
+            throw new NullPointerException(mContext.getText(R.string.cliente_telefono_requerido).toString());
         }
         /*if (cliente.latitud == 0) {
             throw new NullPointerException("Debe ingresar latitud");
@@ -86,28 +87,29 @@ public class DAOCliente {
         // Validacion existe vendedor
         Usuario _usuario =  daoUsuario.GetUsuario(cliente.id_vendedor);
         if(_usuario == null)
-            throw new NullPointerException("No se encuentra informacion de vendedor");
+            throw new NullPointerException(mContext.getText(R.string.usuario_null).toString());
 
         // Validacion de campos obligatorios
         if (cliente.nombre.trim().equals(""))
         {
-            throw new NullPointerException("Debe ingresar nombre");
+            throw new NullPointerException(mContext.getText(R.string.cliente_nombre_requerido).toString());
         }
         if (cliente.direccion.trim().equals(""))
         {
-            throw new NullPointerException("Debe ingresar direccion");
+            throw new NullPointerException(mContext.getText(R.string.cliente_direccion_requerido).toString());
         }
         if (cliente.telefono.trim().equals(""))
         {
-            throw new NullPointerException("Debe ingresar telefono");
+            throw new NullPointerException(mContext.getText(R.string.cliente_telefono_requerido).toString());
         }
+        /*
         if (cliente.latitud == 0) {
             throw new NullPointerException("Debe ingresar latitud");
         }
         if (cliente.longuitud == 0) {
             throw new NullPointerException("Debe ingresar longuitud");
         }
-
+*/
         ContentValues values = new ContentValues();
         values.put("ID_VENDEDOR", cliente.id_vendedor);
         values.put("NOMBRE", cliente.nombre);
@@ -122,7 +124,7 @@ public class DAOCliente {
         // Valido que el cliente exista
         Cliente _cliente = getCliente(cliente.id);
         if(_cliente == null)
-            throw new NullPointerException("No se encuentra informacion de cliente");
+            throw new NullPointerException(mContext.getText(R.string.cliente_null).toString());
 
         ContentValues values = new ContentValues();
         values.put("ES_ACTIVO", "0");
@@ -155,7 +157,7 @@ public class DAOCliente {
         // Validacion existe vendedor
         Usuario _usuario =  daoUsuario.GetUsuario(id_vendedor);
         if(_usuario == null)
-            throw new NullPointerException("No se encuentra informacion de vendedor");
+            throw new NullPointerException(mContext.getText(R.string.usuario_null).toString());
 
 
         ArrayList<Cliente> clientes = new ArrayList<>();
@@ -182,7 +184,7 @@ public class DAOCliente {
         // Validacion existe vendedor
         Usuario _usuario = daoUsuario.GetUsuario(id_vendedor);
         if (_usuario == null)
-            throw new NullPointerException("No se encuentra informacion de vendedor");
+            throw new NullPointerException(mContext.getText(R.string.usuario_null).toString());
 
 
         ArrayList<Cliente> clientes = new ArrayList<>();

@@ -1,31 +1,34 @@
 package samuelvasquez.inacap.cl.unidad3.dataaccess;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Locale;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import samuelvasquez.inacap.cl.unidad3.datamodel.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
+
+import samuelvasquez.inacap.cl.unidad3.R;
+import samuelvasquez.inacap.cl.unidad3.datamodel.Cliente;
+import samuelvasquez.inacap.cl.unidad3.datamodel.DetallePedido;
+import samuelvasquez.inacap.cl.unidad3.datamodel.Pedido;
+import samuelvasquez.inacap.cl.unidad3.datamodel.Producto;
+import samuelvasquez.inacap.cl.unidad3.datamodel.ResumenCaja;
 
 public class DAOPedido {
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     protected SQLiteDatabase database;
     private DBHelper dbHelper;
     private Context mContext;
-
     private String tabla = "PEDIDO";
     private String[] columnas = new String[]{"ID", "ID_VENDEDOR", "ID_CLIENTE", "FECHA_ENTREGA", "ENTREGADO", "ES_ACTIVO"} ;
-
     private String tablaDetalle = "PEDIDO_DETALLE";
     private String[] columnasDetalle = new String[]{"ID", "ID_PEDIDO", "ID_PRODUCTO", "CANTIDAD", "PRECIO_UNITARIO", "ES_ACTIVO"} ;
-
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
     private DAOCliente daoCliente;
     private DAOProducto daoProducto;
 
@@ -48,7 +51,7 @@ public class DAOPedido {
         // Valido que el pedido exista
         Pedido _pedido = getPedido(pedido.id);
         if(_pedido == null)
-            throw new NullPointerException("No se encuentra informacion de pedido");
+            throw new NullPointerException(mContext.getText(R.string.pedido_null).toString());
 
         ContentValues values = new ContentValues();
         values.put("ID_CLIENTE", pedido.id_cliente);
@@ -101,7 +104,7 @@ public class DAOPedido {
         // Valido que el pedido exista
         Pedido _pedido = getPedido(pedido.id);
         if(_pedido == null)
-            throw new NullPointerException("No se encuentra informacion de pedido");
+            throw new NullPointerException(mContext.getText(R.string.pedido_null).toString());
 
         ContentValues values = new ContentValues();
         values.put("ES_ACTIVO", "0");

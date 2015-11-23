@@ -11,11 +11,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -31,14 +34,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String idioma = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getString("idioma_list", "es");
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        this.getApplicationContext().getResources().updateConfiguration(config, null);
+
+
         setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
-        if (extra != null)
-        {
-            if (extra.containsKey(ARG_VENDEDOR_ID))
-            {
+        if (extra != null) {
+            if (extra.containsKey(ARG_VENDEDOR_ID)) {
                 id_vendedor = extra.getInt(ARG_VENDEDOR_ID);
             }
         }
@@ -69,87 +81,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        /*
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("content")) {
-                String content = savedInstanceState.getString("content");
-
-                if (content.equals(ClientesAgregarFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(ClientesAgregarFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.add_cliente);
-                        contentFragment = fragmentManager.findFragmentByTag(ClientesAgregarFragment.ARG_ITEM_ID);
-                    }
-                }
-                if (content.equals(ClientesListFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(ClientesListFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.title_fragment_clientes);
-                        contentFragment = fragmentManager.findFragmentByTag(ClientesListFragment.ARG_ITEM_ID);
-                    }
-                }
-                if (content.equals(PedidosAgregarFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(PedidosAgregarFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.add_pedido);
-                        contentFragment = fragmentManager.findFragmentByTag(PedidosAgregarFragment.ARG_ITEM_ID);
-                    }
-                }
-                if (content.equals(PedidosListFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(PedidosListFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.title_fragment_pedidos);
-                        contentFragment = fragmentManager.findFragmentByTag(PedidosListFragment.ARG_ITEM_ID);
-                    }
-                }
-                if (content.equals(ProductosListFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(ProductosListFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.title_fragment_productos);
-                        contentFragment = fragmentManager.findFragmentByTag(ProductosListFragment.ARG_ITEM_ID);
-                    }
-                }
-                if (content.equals(ResumenFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(ResumenFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.title_fragment_resumen);
-                        contentFragment = fragmentManager.findFragmentByTag(ResumenFragment.ARG_ITEM_ID);
-                    }
-                }
-                if (content.equals(MapFragment.ARG_ITEM_ID)) {
-                    if (fragmentManager.findFragmentByTag(MapFragment.ARG_ITEM_ID) != null) {
-                        setTitle(R.string.title_fragment_map);
-                        contentFragment = fragmentManager.findFragmentByTag(MapFragment.ARG_ITEM_ID);
-                    }
-                }
-            }
-        }
-        */
     }
-
-/*
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-      if (contentFragment instanceof ClientesAgregarFragment) {
-            outState.putString("content", ClientesAgregarFragment.ARG_ITEM_ID);
-        }
-        if (contentFragment instanceof ClientesFragment) {
-            outState.putString("content", ClientesFragment.ARG_ITEM_ID);
-        }
-        if (contentFragment instanceof PedidosAgregarFragment) {
-            outState.putString("content", PedidosAgregarFragment.ARG_ITEM_ID);
-        }
-        if (contentFragment instanceof PedidosListFragment) {
-            outState.putString("content", PedidosListFragment.ARG_ITEM_ID);
-        }
-        if (contentFragment instanceof ProductosListFragment) {
-            outState.putString("content", ProductosListFragment.ARG_ITEM_ID);
-        }
-        if (contentFragment instanceof ResumenFragment) {
-            outState.putString("content", ResumenFragment.ARG_ITEM_ID);
-        }
-        if (contentFragment instanceof MapFragment) {
-            outState.putString("content", MapFragment.ARG_ITEM_ID);
-        }
-        super.onSaveInstanceState(outState);
-    }
-    */
 
     @Override
     public void onBackPressed() {
@@ -208,7 +140,10 @@ public class MainActivity extends AppCompatActivity
             goToResumen();
         } else if (id == R.id.nav_ruta) {
             goToRuta();
+        } else if (id == R.id.nav_settings) {
+            goToSettings();
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -262,7 +197,10 @@ public class MainActivity extends AppCompatActivity
 
     public void switchContent(Fragment fragment, String tag) {
         Log.d("switchContent", tag);
+
+
         FragmentManager fragmentManager = getSupportFragmentManager();
+
         while (fragmentManager.popBackStackImmediate())
             ;
 
@@ -272,7 +210,6 @@ public class MainActivity extends AppCompatActivity
             transaction.replace(R.id.content_frame_main, fragment, tag);
 
             transaction.commit();
-            //contentFragment = fragment;
         }
         Log.d("switchContent", tag + " ok");
 
@@ -369,5 +306,13 @@ public class MainActivity extends AppCompatActivity
         switchContent(fragment, MapFragment.ARG_ITEM_ID);
         invalidateOptionsMenu();
     }
+
+    public void goToSettings() {
+        SettingsFragment fragment1 = new SettingsFragment();
+        switchContent(fragment1, SettingsFragment.ARG_ITEM_ID);
+        invalidateOptionsMenu();
+    }
+
+
 
 }

@@ -1,8 +1,10 @@
 package samuelvasquez.inacap.cl.unidad3;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOUsuario;
 import samuelvasquez.inacap.cl.unidad3.datamodel.Usuario;
@@ -23,7 +27,23 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+/*
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String idioma =  prefs.getString("idioma_list", "es");
+        Configuracion.changeLocale(this, idioma);
+*/
+        String idioma = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getString("idioma_list", "es");
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+        this.getApplicationContext().getResources().updateConfiguration(config, null);
+
         setContentView(R.layout.activity_login);
+        setTitle(getText(R.string.app_name));
 
         txt_usuario = (EditText)findViewById(R.id.txt_usuario);
         txt_contrasena = (EditText)findViewById(R.id.txt_contrasena);
@@ -38,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 if ( checkValidation () )
                     ValidarLoginUsuario();
                 else
-                    Toast.makeText(LoginActivity.this, "Debe corregir los errores para continuar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, getText(R.string.hay_errores), Toast.LENGTH_LONG).show();
             }} );
 
         txt_usuario.addTextChangedListener(new TextWatcher() {
@@ -100,14 +120,14 @@ public class LoginActivity extends AppCompatActivity {
     {
         if(txt_usuario.getText().toString().trim().equals(""))
         {
-            Toast.makeText(LoginActivity.this, "Debe ingresar un nombre de usuario", Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, getText(R.string.login_username_requerido), Toast.LENGTH_LONG).show();
             txt_usuario.requestFocus();
             return;
         }
 
         if(txt_contrasena.getText().toString().trim().equals(""))
         {
-            Toast.makeText(LoginActivity.this, "Debe ingresar contraseña", Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, getText(R.string.login_password_requerido), Toast.LENGTH_LONG).show();
             txt_contrasena.requestFocus();
             return;
         }
@@ -120,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             // Muestra mensaje de exito
             Toast.makeText(LoginActivity.this,
-                    "Usuario correcto",
+                    getText(R.string.login_ok),
                     Toast.LENGTH_SHORT).show();
 
             Usuario _usuario = daoUsuario.GetUsuario(txt_usuario.getText().toString());
@@ -138,9 +158,8 @@ public class LoginActivity extends AppCompatActivity {
         {
             // Muestra mensaje de error
             Toast.makeText(LoginActivity.this,
-                    "Usuario y/o contrasena incorrecta",
+                    getText(R.string.login_error),
                     Toast.LENGTH_SHORT).show();
         }
     }
-
 }

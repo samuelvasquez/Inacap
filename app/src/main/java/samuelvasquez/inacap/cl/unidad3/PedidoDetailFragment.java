@@ -17,9 +17,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import samuelvasquez.inacap.cl.unidad3.dataaccess.DAOPedido;
 import samuelvasquez.inacap.cl.unidad3.datamodel.DetallePedido;
@@ -74,11 +74,14 @@ public class PedidoDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            //SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            SimpleDateFormat dateFormat = ((SimpleDateFormat) DateFormat.getDateInstance());
 
             ((TextView) rootView.findViewById(R.id.txt_cliente_nombre)).setText(mItem.nombre_cliente);
-            ((TextView) rootView.findViewById(R.id.txt_fecha)).setText(dateFormatter.format(mItem.fecha_entrega));
-            ((TextView) rootView.findViewById(R.id.txt_estado)).setText(mItem.entregado ? "Entregado" : "Pendiente");
+            ((TextView) rootView.findViewById(R.id.txt_fecha)).setText(dateFormat.format(mItem.fecha_entrega));
+            ((TextView) rootView.findViewById(R.id.txt_estado)).setText(mItem.entregado ?
+                    getText(R.string.pedido_entregado) :
+                    getText(R.string.pedido_pendiente));
             TableLayout detalle = (TableLayout) rootView.findViewById(R.id.detalle);
 
             ArrayList<DetallePedido> detalleList = mItem.detalles;
@@ -148,14 +151,14 @@ public class PedidoDetailFragment extends Fragment {
      */
     private void confirmarBorrado() {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(activity);
-        dialogo1.setTitle("Confirmacion");
-        dialogo1.setMessage("Esta seguro de eliminar este pedido?");
-        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+        dialogo1.setTitle(getText(R.string.confirmacion));
+        dialogo1.setMessage(getText(R.string.pedido_eliminar));
+        dialogo1.setPositiveButton(getText(R.string.si), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 borrarPedido();
             }
         });
-        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        dialogo1.setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 return;
             }
