@@ -1,6 +1,6 @@
 # Inacap
 
-Titulo del trabajo: Actividad 18 - Tarea sumativa: Mejorando el look and feel de la aplicación
+Titulo del trabajo: Actividad 20 – Trabajo final: Internacionalización de una aplicación móvil.
 Asignatura: Programación de Aplicaciones Móviles Android
 Profesor: Andrés Muñoz 
 Alumno: Samuel Vasquez
@@ -14,7 +14,9 @@ Usuario: test
 Contraseña: test
 -------------------------------------------------
 
-Se cambio completamente el diseño grafico de la aplicacion, siguiendo las guias del Material Design.
+Se subio proyecto a GitHub, en https://github.com/samuelvasquez/Inacap, version 4.0
+
+La aplicacion opera en dos idiomas: Español e Ingles. Para cambiar de idioma, se debe entrar al menu Configuracion / Setting 
 
 En las pantallas de clientes y entrega de pedidos, se configuraron dos layout distintos. Para pantallas menores a 480 dp de ancho, se muestra el listado de elementos y al hacer clic se cambia a otra pantalla con el detalle del cliente o pedido.
 
@@ -24,9 +26,9 @@ Para probar la diferencias de layout, se propone usar la aplicacion con la panta
 
 Se incorporo boton flotante para la opcion "Agregar" y botones en el Action Bar para Modificar, Eliminar, Guardar y Cancelar.
 
-Se subio proyecto a GitHub, en https://github.com/samuelvasquez/Inacap, version 3.0
-
 La Google API KEY se registra en el archivo \app\src\debug\res\values\google_maps_api.xml
+
+Para probar los mapas, debe registrarse como desarrollador en la consola de Google y obtener su propia API KEY
 
 El mapa opera cargando los pedidos del vendedor que se encuentren pendiente. Por lo que para visualizar los clientes en el mapa, primero debe crear al menos un pedido y dejarno pendiente (no entregado)
 
@@ -34,4 +36,7 @@ Si no hay pedidos pendientes se muestra mapa de Santiago y mensaje "No hay clien
 
 En caso de encontrar pedidos pendientes muestra mapa de Santiago con la ubicacion de los clientes que tienen pedidos pendientes.
 
+Los casos de test unitario se encuentran en \app\src\androidTest\java\samuelvasquez\inacap\cl\unidad3
+
 ----
+
